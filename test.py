@@ -1,17 +1,10 @@
-def lagrange_term(term, x_datapoints, i, x, degree):
-    for j in range(degree+1):
-        if j != i:
-            term *= (x - x_datapoints[j]) / (x_datapoints[i] - x_datapoints[j])
-    return term
+import math
 
-def lagrange_evalfunct(x_datapoints, y_datapoints, x, degree) -> float:
-    value = 0
-    for i in range(degree+1):
-        term = lagrange_term(y_datapoints[i], x_datapoints, i, x, degree)
-        value += term
-    return value
+start = -5
+end = 3
+n_points = 9 
 
-x = [0, 1, 2, 5]
-y = [2, 3, 12, 147]
 
-print(lagrange_evalfunct(x, y, 3, 3))
+for x in range(1, n_points+1):
+    print(start+(end-start)*((-math.cos(((x-1)*math.pi)/n_points)+1)/2), x)
+    # print((start + end)/2 + ((end-start)/2)*(math.cos(((2*x+1)/(2*n_points))*math.pi)), x)
