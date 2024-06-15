@@ -91,3 +91,66 @@ if __name__ == '__main__':
     pyplot.savefig('Gaussian vs t Distribution.png')
     
     pyplot.show()
+
+
+
+
+
+
+
+
+
+
+
+
+### CACHE
+
+# @title Inverse survivability
+# solved as root-finding problem using bisection method
+# def surv_inv (alpha, a, b, k, mu):
+#     isDiffSign = lambda x1, x2 : np.sign(x1) != np.sign(x2)
+
+#     f = lambda t : cdf(t, k, mu) - alpha
+
+#     tol = 1.0e-9
+
+#     fa = f(a)
+#     fb = f(b)
+
+#     if fa == 0.0:
+#         return a
+    
+#     if fb == 0.0:
+#         return b
+    
+#     print("-> CDF(" + str(a) + ") - " + str(alpha) + " = " + str(fa))
+#     print("-> CDF(" + str(b) + ") - " + str(alpha) + " = " + str(fb))
+    
+#     if not isDiffSign(fa, fb):
+#         print("---> no root at: ", alpha)
+#         return None
+    
+#     n = int (math.ceil (math.log(abs(b-a)/tol) / math.log(2.0)))
+
+#     print("---> iterations: ", n)
+
+#     for i in range(n):
+#         print("-> CDF(" + str(a) + ") - " + str(alpha) + " = " + str(fa))
+#         print("-> CDF(" + str(b) + ") - " + str(alpha) + " = " + str(fb))
+
+#         c = 0.5 * (a + b)
+#         fc = f(c)
+
+#         if fc == 0.0:
+#             print("---> returning c =", c)
+#             return c
+
+#         if isDiffSign(fa, fc):
+#             b = c
+#             fb = fc
+        
+#         elif isDiffSign(fb, fc):
+#             a = c
+#             fa = fc
+
+#     return 0.5 * (a+b)
