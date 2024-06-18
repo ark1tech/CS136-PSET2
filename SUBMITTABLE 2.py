@@ -2,8 +2,8 @@ import math
 import numpy as np
 import plotly.graph_objects as go
 
-# @title Gauss-Laguerre constants
-# Notation: (A_i, x_i)
+# Gaussian quadrature constants 
+# Notation: (w_i, x_i)
 GAUSS_LAGUERRE = [
     (0.458964, 0.222847),
     (0.417, 1.188932),
@@ -16,16 +16,16 @@ GAUSS_LAGUERRE = [
 GAUSS_LEGENDRE = [
     (0.360762, -0.661209),
     (0.467914, -0.238619),
-    (0.171324, -0.171324),
-    (0.171324, 0.171324),
+    (0.171324, -0.932469),
+    (0.171324, 0.932469),
     (0.467914, 0.238619),
     (0.360762, 0.661209)
 ]
 
-# @title Weibull distribution function
-# Uses Gauss-Laguerre quadratures
+# @title Weibull distribution function -- uses Gauss-Laguerre quadratures
 def f_Weibull (t, k, mu):
     denomArea = 0
+    
     for node in GAUSS_LAGUERRE:
         denomArea += node[0] * (node[1]**(1/k))
 
@@ -33,17 +33,18 @@ def f_Weibull (t, k, mu):
 
     return (k/lbda) * ((t/lbda)**(k-1)) * (math.e ** (-(t/lbda)**k))
 
-# @title Integral of Weibull function
-# Uses Gauss-Laguerre quadratures
+# Integral of Weibull function -- uses Gauss-Legendre quadratures
 def cdf (t, k, mu):
     pdf_area = 0
-    for node in GAUSS_LAGUERRE:
-        pdf_area += node[0] * (math.e**node[1]) * f_Weibull(t + node[1], k, mu)
+    
+    for node in GAUSS_LEGENDRE:
+        u = (t/2)*node[1] + t/2
+        du = t/2
+        pdf_area += node[0] * f_Weibull(u, k, mu) * du
 
-    return 1 - pdf_area
+    return pdf_area
 
-# @title Inverse survivability
-# Solved as root-finding problem using bisection method
+# Inverse survivability -- solved as root-finding problem using bisection method
 def bisection (a, b, alpha, mu, k):
     f = lambda t : 1 - cdf(t, k, mu) - alpha
 
@@ -76,7 +77,7 @@ def bisection (a, b, alpha, mu, k):
     return 0.5 * (a+b)
 
 # @title Plotting function
-def plot(x05, x1, x2, y05, y1, y2, xtitle, ytitle):
+def plot (x05, x1, x2, y05, y1, y2, xtitle, ytitle, title):
     fig = go.Figure()
     fig.add_traces([
         go.Scatter(x=x05, y=y05, mode='lines', marker = {'color' : 'blue'}, name="k = 0.5"),
@@ -84,6 +85,7 @@ def plot(x05, x1, x2, y05, y1, y2, xtitle, ytitle):
         go.Scatter(x=x2, y=y2, mode='lines', marker = {'color' : 'magenta'}, name="k = 2")
     ])
     fig.update_layout(
+        title_text=title,
         height=1080*0.5,
         width=1920*0.6,
         xaxis_title=xtitle,
@@ -91,22 +93,19 @@ def plot(x05, x1, x2, y05, y1, y2, xtitle, ytitle):
     )
     fig.show()
 
-if __name__ == '__main__':
-    # Lists for values storing
-    x_values, y_t_05, y_t_1, y_t_2 = [], [], [], []
+# Lists for values storing
+x_values, y_t_05, y_t_1, y_t_2 = [], [], [], []
 
-    # Average life expectancy
-    mu = 78
+# Average life expectancy
+mu = 78
 
-    # For alpha in (0,1) with 0.01 step
-    for alpha in range(10, 100, 1):
-        alpha /= 100
+# For alpha in (0,1) with 0.01 step
+for alpha in range(1, 100, 1):
+    alpha /= 100
+    x_values.append(alpha)
+    y_t_05.append(bisection(1, 250, alpha, mu, 0.5))
+    y_t_1.append(bisection(1, 250, alpha, mu, 1))
+    y_t_2.append(bisection(1, 250, alpha, mu, 2))
 
-        x_values.append(alpha)
-
-        y_t_05.append(bisection(0, 100, alpha, mu, 0.5))
-        y_t_1.append(bisection(0, 100, alpha, mu, 1))
-        y_t_2.append(bisection(0, 100, alpha, mu, 2))
-
-    # Plotting proper
-    plot(x_values, x_values, x_values, y_t_05, y_t_1, y_t_2, "Probability", "Time")
+# Plotting proper
+plot(x_values, x_values, x_values, y_t_05, y_t_1, y_t_2, "Probability (alpha)", "Time (t)", "Inverse survival (mu = 78)")
