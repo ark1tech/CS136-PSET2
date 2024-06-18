@@ -13,6 +13,15 @@ GAUSS_LAGUERRE = [
     (0.000000898548, 15.982874)
 ]
 
+GAUSS_LEGENDRE = [
+    (0.360762, -0.661209),
+    (0.467914, -0.238619),
+    (0.171324, -0.171324),
+    (0.171324, 0.171324),
+    (0.467914, 0.238619),
+    (0.360762, 0.661209)
+]
+
 # @title Weibull distribution function
 # Uses Gauss-Laguerre quadratures
 def f_Weibull (t, k, mu):
