@@ -22,10 +22,9 @@ GAUSS_LEGENDRE = [
     (0.360762, 0.661209)
 ]
 
-# @title Weibull distribution function -- uses Gauss-Laguerre quadratures
+# Weibull distribution function -- uses Gauss-Laguerre quadratures
 def f_Weibull (t, k, mu):
     denomArea = 0
-    
     for node in GAUSS_LAGUERRE:
         denomArea += node[0] * (node[1]**(1/k))
 
@@ -36,7 +35,6 @@ def f_Weibull (t, k, mu):
 # Integral of Weibull function -- uses Gauss-Legendre quadratures
 def cdf (t, k, mu):
     pdf_area = 0
-    
     for node in GAUSS_LEGENDRE:
         u = (t/2)*node[1] + t/2
         du = t/2
@@ -76,7 +74,7 @@ def bisection (a, b, alpha, mu, k):
 
     return 0.5 * (a+b)
 
-# @title Plotting function
+# Plotting function
 def plot (x05, x1, x2, y05, y1, y2, xtitle, ytitle, title):
     fig = go.Figure()
     fig.add_traces([
