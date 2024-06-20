@@ -81,13 +81,16 @@ def regula_falsi(a, b, alpha, mu, k):
 # Plotting function
 def plot (x05, x1, x2, y05, y1, y2, xtitle, ytitle, title, printAsymptote = False):
     fig = go.Figure()
+    
     fig.add_traces([
         go.Scatter(x=x05, y=y05, mode='lines', marker = {'color' : 'blue'}, name="k = 0.5"),
         go.Scatter(x=x1, y=y1, mode='lines', marker = {'color' : 'red'}, name="k = 1"),
         go.Scatter(x=x2, y=y2, mode='lines', marker = {'color' : 'magenta'}, name="k = 2")
     ])
+
     if printAsymptote:
         fig.add_traces([go.Scatter(x=[i/100 for i in range(0, 101, 1)], y=[78 for i in range(0, 101, 1)], line_dash ='dash', marker = {'color' : 'orange'}, name="Life expectancy")])
+    
     fig.update_layout(
         title_text=title,
         xaxis_title=xtitle,
@@ -100,6 +103,7 @@ def plot (x05, x1, x2, y05, y1, y2, xtitle, ytitle, title, printAsymptote = Fals
         font_color="#0e0f11",
         margin=dict(t=120, b=80)
     )
+    
     fig.show()
 
 # Lists for values storing
@@ -109,12 +113,12 @@ x_values, y_t_05, y_t_1, y_t_2 = [], [], [], []
 mu = 78
 
 # For alpha in (0,1) with 0.01 step
-for alpha in range(1, 100, 1):
+for alpha in range(1, 101, 1):
     alpha /= 100
     x_values.append(alpha)
-    y_t_05.append(regula_falsi(1, 250, alpha, mu, 0.5))
-    y_t_1.append(regula_falsi(1, 250, alpha, mu, 1))
-    y_t_2.append(regula_falsi(1, 250, alpha, mu, 2))
+    y_t_05.append(regula_falsi(1, 121, alpha, mu, 0.5))
+    y_t_1.append(regula_falsi(1, 121, alpha, mu, 1))
+    y_t_2.append(regula_falsi(1, 121, alpha, mu, 2))
 
 # Plotting proper
-plot(x_values, x_values, x_values, y_t_05, y_t_1, y_t_2, "Probability (alpha)", "Time (t)", "Inverse survival (mu = 78)")
+plot(x_values, x_values, x_values, y_t_05, y_t_1, y_t_2, "Probability (alpha)", "Time (t)", "Inverse survival function", True)
