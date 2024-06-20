@@ -79,36 +79,15 @@ def regula_falsi(a, b, alpha, mu, k):
             a = c 
 
 # Plotting function
-def plot (x05, x1, x2, y05, y1, y2, xtitle, ytitle, title):
+def plot (x05, x1, x2, y05, y1, y2, xtitle, ytitle, title, printAsymptote = False):
     fig = go.Figure()
     fig.add_traces([
         go.Scatter(x=x05, y=y05, mode='lines', marker = {'color' : 'blue'}, name="k = 0.5"),
         go.Scatter(x=x1, y=y1, mode='lines', marker = {'color' : 'red'}, name="k = 1"),
         go.Scatter(x=x2, y=y2, mode='lines', marker = {'color' : 'magenta'}, name="k = 2")
     ])
-    fig.update_layout(
-        title_text=title,
-        xaxis_title=xtitle,
-        yaxis_title=ytitle,
-        height=1080*0.5,
-        width=1920*0.6,
-        font_family="CMU Serif",
-        font_size=15,
-        title_font_size=25,
-        font_color="#0e0f11",
-        margin=dict(t=120, b=80)
-    )
-    fig.show()
-
-# Plotting function: inverse
-def plot_inverse (x05, x1, x2, y05, y1, y2, xtitle, ytitle, title):
-    fig = go.Figure()
-    fig.add_traces([
-        go.Scatter(x=x05, y=y05, mode='lines', marker = {'color' : 'blue'}, name="k = 0.5"),
-        go.Scatter(x=x1, y=y1, mode='lines', marker = {'color' : 'red'}, name="k = 1"),
-        go.Scatter(x=x2, y=y2, mode='lines', marker = {'color' : 'magenta'}, name="k = 2"),
-        go.Scatter(x=[i/100 for i in range(0, 101, 1)], y=[78 for i in range(0, 101, 1)], line_dash ='dash', marker = {'color' : 'orange'}, name="Life expectancy"),
-    ])
+    if printAsymptote:
+        fig.add_traces([go.Scatter(x=[i/100 for i in range(0, 101, 1)], y=[78 for i in range(0, 101, 1)], line_dash ='dash', marker = {'color' : 'orange'}, name="Life expectancy")])
     fig.update_layout(
         title_text=title,
         xaxis_title=xtitle,
